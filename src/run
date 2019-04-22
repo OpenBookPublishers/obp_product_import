@@ -10,16 +10,18 @@ usage: python run
 Use of this software is governed by the terms of the MIT license
 
 Dependencies:
-  httplib2==0.10.3
-  urllib3==1.20
+  httplib2==0.12.1
 """
 
 import os
 import sys
 import csv
 import json
-import urllib2
 import httplib2
+import urllib.error
+import urllib.parse
+import urllib.request
+
 
 CSV_LOC_URL       = os.environ['CSV_LOC_URL']
 CSV_TITLE_COL     = int(os.environ['CSV_TITLE_COL'])
@@ -68,7 +70,7 @@ def is_doi_unique(doi):
         r = json.loads(content)
         m = "%s: %s" % (r['message'], r['parameters']['uri'])
         if r['message'] != 'No records have matched your search criteria.':
-            print >>sys.stderr, m
+            print(m, file=sys.stderr)
             return False
     return True
 
@@ -115,7 +117,7 @@ def standarise_uris(uris):
 
 
 def get_csv():
-    return urllib2.urlopen(CSV_LOC_URL)
+    return urllib.request.urlopen(CSV_LOC_URL)
 
 
 def process_csv(mapping_file):

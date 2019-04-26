@@ -117,11 +117,11 @@ def standarise_uris(uris):
 
 
 def get_csv():
-    return urllib.request.urlopen(CSV_LOC_URL)
+    return urllib.request.urlopen(CSV_LOC_URL).read().decode('utf-8')
 
 
 def process_csv(mapping_file):
-    buff = csv.reader(mapping_file)
+    buff = csv.reader(mapping_file.splitlines(), delimiter=',', quotechar='"')
     for row in buff:
         title = row[CSV_TITLE_COL]
         doi = row[CSV_DOI_COL]
